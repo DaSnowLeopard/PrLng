@@ -1,0 +1,225 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <istream>
+#include <algorithm>
+using namespace std;
+//#include "InstSession.h"
+//#include "InstSession.cpp"
+
+struct subjects {
+    string subject;
+    int mark;
+};
+
+class InstSession {
+    string surname;
+    int group;
+    subjects first;
+    subjects second;
+    subjects third;
+public:
+
+    InstSession();
+    InstSession(string c_surname, int c_group, subjects c_first, subjects c_second, subjects c_third);
+    InstSession(const InstSession& S);
+    ~InstSession();
+
+    void In();
+    void Out();
+    void set_group_number(int group_number);
+    int get_group_number();
+    void Debt(InstSession* S, int cnt);
+    void SubjectMark(InstSession* S, int cnt, string subject_input);
+    void GroupMark(InstSession* S, int cnt, int count, int group_number);
+
+    friend istream& operator>> (istream& stream, InstSession& S);
+    friend ostream& operator<< (ostream& stream, const InstSession& S);
+
+    static InstSession* fromFile(istream& file);
+    static void toFile(ostream& file, InstSession S);
+
+    double get_average_mark() const {
+        return (first.mark + second.mark + third.mark) / 3;
+    }
+};
+
+void InstSession::set_group_number(int group_number) {
+    group = group_number;
+} //set_X
+
+int InstSession::get_group_number() {
+    int number_out;
+    number_out = group;
+    return number_out;
+} //get_X
+
+void InstSession::Debt(InstSession* S, int cnt) {
+    for (int i = 0; i < cnt; i++) {
+        if ((S[i].first.mark == 2) or (S[i].second.mark == 2) or ((S[i].third.mark == 2))) {
+            S[i].Out();
+        }
+    }
+    cout << "done" << endl;
+} //должники
+
+void InstSession::SubjectMark(InstSession* S, int cnt, string subject_input) {
+    cout << "input subject name - " << endl;
+    cin >> subject_input;
+    for (int i = 0; i < cnt; i++) {
+        if ((S[i].first.subject == subject_input) or (S[i].second.subject == subject_input) or (S[i].third.subject == subject_input)) {
+            S[i].Out();
+        }
+    }
+    cout << "done" << endl;
+} //оценки по предмету
+
+void InstSession::GroupMark(InstSession* S, int cnt, int count, int group_number) {
+    int group_input;
+    double overall_mark = 0;
+    count = 0;
+    cout << "input group number - " << endl;
+    cin >> group_input;
+    for (int i = 0; i < cnt; i++) {
+        if (S[i].group == group_input) {
+            count += 1;
+            overall_mark = overall_mark + S[i].first.mark + S[i].second.mark + S[i].third.mark;
+        }
+    }
+    cout << overall_mark / count << endl;
+    cout << "done" << endl;
+} //ср балл группы
+
+InstSession::InstSession() {
+    surname = "Voroshilova";
+    group = 12;
+    first.subject = "russian";
+    first.mark = 4;
+    second.subject = "english";
+    second.mark = 5;
+    third.subject = "history";
+    third.mark = 4;
+} //конструктор по умолчанию
+
+InstSession::InstSession(string c_surname, int c_group, subjects c_first, subjects c_second, subjects c_third) {
+    surname = c_surname;
+    group = c_group;
+    first = c_first;
+    second = c_second;
+    third = c_third;
+} //конструктор с параметром
+
+InstSession::InstSession(const InstSession& S) {
+    surname = S.surname;
+    group = S.group;
+    first = S.first;
+    second = S.second;
+    third = S.third;
+} //конструктор копирования
+
+InstSession::~InstSession() {
+
+} //диструктор
+
+void InstSession::In() {
+    cout << "enter surname - " << endl;
+    cin >> surname;
+    cout << "enter group number - " << endl;
+    cin >> group;
+    cout << "enter subject 1 - " << endl;
+    cin >> first.subject;
+    cout << "enter mark for subject 1 - " << endl;
+    cin >> first.mark;
+    cout << "enter subject 2 - " << endl;
+    cin >> second.subject;
+    cout << "enter mark for subject 2 - " << endl;
+    cin >> second.mark;
+    cout << "enter subject 3 - " << endl;
+    cin >> third.subject;
+    cout << "enter mark for subject 3 - " << endl;
+    cin >> third.mark;
+} //ввод
+
+void InstSession::Out() {
+    cout << "student: " << surname << "; " << "group: " << group << endl;
+    cout << "subjects:" << endl;
+    cout << first.subject << " - " << first.mark << endl;
+    cout << second.subject << " - " << second.mark << endl;
+    cout << third.subject << " - " << third.mark << endl;
+} //вывод
+
+istream& operator>> (istream& stream, InstSession& S) {
+    stream >> S.surname >> S.group >> S.first.subject >> S.first.mark >> S.second.subject >> S.second.mark >> S.third.subject >> S.third.mark;
+    return stream;
+} //перегрузка ввода
+
+ostream& operator<< (ostream& stream, const InstSession& S) {
+    stream << "surname - " << S.surname << "\n" << "group - " << S.group << "\n" << "subject 1 - " << S.first.subject << "\n" << "mark - " << S.first.mark << "\n" << "subject 2 - " << S.second.subject << "\n" << "mark - " << S.second.mark << "\n" << "subject 3 - " << S.third.subject << "\n" << "mark - " << S.third.mark << endl;
+    return stream;
+} //перегрузка вывода
+
+InstSession* InstSession::fromFile(istream& file) {
+    int size;
+    file >> size;
+    InstSession* List = new InstSession[size];
+    for (int i = 0; i < size; i++) {
+        file >> List[i].surname >> List[i].group >> List[i].first.subject >> List[i].first.mark >> List[i].second.subject >> List[i].second.mark >> List[i].third.subject >> List[i].third.mark;
+    }
+    return List;
+} //чтение файла
+
+void InstSession::toFile(ostream& file, InstSession S) {
+    file << S.surname << " " << S.group << " " << S.first.subject << " " << S.first.mark << " " << S.second.subject << " " << S.second.mark << " " << S.third.subject << " " << S.third.mark << endl;
+} //сохранение в файл
+
+bool compare_average_mark(const InstSession& a, const InstSession& b) {
+    return a.get_average_mark() < b.get_average_mark();
+} //сравнение среднего балла для сортировки
+
+void sort_average_mark(InstSession* S, int cnt) {
+    sort(S, S + cnt, compare_average_mark);
+} //сортировка по среднему баллу
+
+
+
+int main() {
+    int cnt = 0;
+    InstSession students;
+    students.Out();
+    students.set_group_number(20);
+    students.Out();
+
+    ifstream file1("1.txt");
+    fstream file2("2.txt");
+    InstSession* Test = InstSession::fromFile(file1);
+
+    for (int i = 0; i < 2; i++) {
+        Test[i].In();
+        cnt += 1;
+    }
+    for (int i = 0; i < 2; i++) {
+        InstSession::toFile(file2, Test[i]);
+    }
+
+    void menu(int input); {
+        int input;
+        InstSession List;
+        while (input != 0) {
+            cout << "1 - students with debts \n" << "2 - all marks for subject \n" << "3 - average group mark \n" << "0 - end session" << endl;
+            cout << "input number - " << endl;
+            cin >> input;
+            if (input == 1) {
+                List.Debt();
+            }
+            else if (input == 2) {
+                List.SubjectMark();
+            }
+            else if (input == 3) {
+                List.GroupMark();
+            }
+        }
+    }
+
+    //sort_average_mark(Test, 2); ?
+
+}
