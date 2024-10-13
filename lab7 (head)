@@ -1,0 +1,49 @@
+def read_file():
+    Num = []
+    with open('1.txt') as file: # открываем файл как переменную file
+        for line in file: # построчно читаем файл
+            line_num = line.strip().split() # разделяем строку на числа
+            for num in line_num: # расматриваем отдельно каждое число в строке
+                Num.append(float(num)) # добавляем каждое число в список меняя формат
+    print("file opened and read")
+    return Num
+
+def main_function(Num):
+    max = -1000.0
+    min = 100000000.0
+    min_index = 0
+    max_index = 0
+    sum = 0
+
+    for i in range(len(Num)):
+        if Num[i] < min:
+            min = Num[i]
+            min_index = i
+        else:
+            min = min
+
+    for j in range(len(Num)):
+        if Num[j] > max:
+            max = Num[j]
+            max_index = j
+        else:
+            max = max
+
+    if min_index < max_index:
+        for k in range(min_index + 1, max_index):
+            sum += Num[k]
+    elif min_index > max_index:
+        for k in range(max_index + 1, min_index):
+            sum += Num[k]
+    elif abs(min_index - max_index) == 0:
+        sum = 0
+    print("sum found")
+    return sum
+
+def save_file(sum):
+    file = open("2.txt", "w")
+    file.write(str(sum) + "\n")
+    file.close()
+    print("result saved and file closed")
+
+
