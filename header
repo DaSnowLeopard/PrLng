@@ -1,0 +1,35 @@
+def user_input(n): # заполнение массива с клавиатуры
+    Num = []
+    for i in range(n):
+        user_input = int(input("enter element - "))
+        Num.append(user_input)
+    return Num
+
+def max_element(n, Num): # поиск максимального элемента
+    max_element = -1000000
+
+    for i in range(n):
+        if Num[i] > max_element:
+            max_element = Num[i]
+        else:
+            max_element = max_element
+    return max_element
+
+def main_function(n, Num, max_element): # поиск всех значений по варианту задания
+    cnt1 = 0
+    cnt2 = 0
+    sum1 = 0
+    sum2 = 0
+
+    for i in range(n):
+        if Num[i] != max_element:
+            sum1 += Num[i]
+            cnt1 += 1
+        else:
+            for i in range(i + 1, n):
+                if Num[i] != max_element:
+                    sum2 += Num[i]
+                    cnt2 += 1
+            break
+    return sum1, sum2, cnt1, cnt2
+
