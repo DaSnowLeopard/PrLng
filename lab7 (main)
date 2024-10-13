@@ -1,0 +1,8 @@
+import header
+
+list = header.read_file()
+
+sum = header.main_function(list)
+
+header.save_file(sum)
+
