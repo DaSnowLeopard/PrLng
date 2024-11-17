@@ -4,7 +4,7 @@ n = int(input("enter nuber of elements - "))
 Num = header.user_input(n) # заполняем массив с клавиатуры с заданным ранее размером n
 
 max_element = header.max_element(n, Num) # находим максимальный элемент
-sum1, sum2, cnt1, cnt2 = header.main_function(n, Num, max_element) # вычисляем значения для поиска средних
+sum1, sum2, cnt1, cnt2 = header.main_function(Num, max_element) # вычисляем значения для поиска средних
                                                                     # значений и сумм по заданию варианты
 
 print("list: ", Num) # выводим список
