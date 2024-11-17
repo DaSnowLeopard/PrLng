@@ -15,21 +15,15 @@ def max_element(n, Num): # поиск максимального элемент�
             max_element = max_element
     return max_element
 
-def main_function(n, Num, max_element): # поиск всех значений по варианту задания
-    cnt1 = 0
-    cnt2 = 0
-    sum1 = 0
-    sum2 = 0
+def main_function(Num, max_element): # поиск всех значений по варианту задания
+    max_index = Num.index(max_element) # индекс максимального элемента
+    before_max = Num[:max_index] # срез списка до макс элемента
+    after_max = Num[max_index + 1:] # срез списка после макс элемента
 
-    for i in range(n):
-        if Num[i] != max_element:
-            sum1 += Num[i]
-            cnt1 += 1
-        else:
-            for i in range(i + 1, n):
-                if Num[i] != max_element:
-                    sum2 += Num[i]
-                    cnt2 += 1
-            break
+    sum1 = sum(before_max) # сумма элементов до макс эл
+    sum2 = sum(after_max) # сумма элементов после макс эл
+    cnt1 = len(before_max) # количество элементов до макс эл
+    cnt2 = len(after_max) # количество элементов после макс эл
+
     return sum1, sum2, cnt1, cnt2
 
