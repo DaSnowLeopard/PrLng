@@ -1,0 +1,2 @@
+Ball: radius=1.0
+Parallelepiped: a=1.5, b=2.0, c=1.2
